@@ -321,19 +321,21 @@ function AcademyContent() {
                                 <span className="flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" />Sin costo</span>
                               </div>
                               {urgent && <p className="text-xs font-semibold text-[#e11d48]">¡Solo {w.spots} cupos disponibles!</p>}
-                              <button onClick={() => openModal(w)} className="mt-0.5 self-start text-xs text-[#4f46e5] hover:underline">
-                                Ver más info →
-                              </button>
                             </div>
                             {/* CTA */}
-                            <button disabled={full || registered} onClick={() => !full && !registered && openModal(w)}
-                              className={`shrink-0 rounded-full px-6 py-2 text-sm font-semibold transition-colors whitespace-nowrap ${
-                                full ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                : registered ? "border border-emerald-300 bg-emerald-50 text-emerald-700 cursor-default"
-                                : "bg-[#1d4ed8] text-white hover:bg-[#1e40af]"
-                              }`}>
-                              {full ? "Sin cupos" : registered ? "Inscripto ✓" : "Inscribirse"}
-                            </button>
+                            <div className="flex shrink-0 items-center gap-3">
+                              <button onClick={() => openModal(w)} className="text-sm font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
+                                Ver más información
+                              </button>
+                              <button disabled={full || registered} onClick={() => !full && !registered && openModal(w)}
+                                className={`rounded-full px-6 py-2 text-sm font-semibold transition-colors whitespace-nowrap ${
+                                  full ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                  : registered ? "border border-emerald-300 bg-emerald-50 text-emerald-700 cursor-default"
+                                  : "bg-[#1d4ed8] text-white hover:bg-[#1e40af]"
+                                }`}>
+                                {full ? "Sin cupos" : registered ? "Inscripto ✓" : "Inscribirse"}
+                              </button>
+                            </div>
                           </div>
                         )
                       })}
@@ -364,14 +366,16 @@ function AcademyContent() {
                             <span className="flex items-center gap-1"><Globe className="h-3.5 w-3.5" />{s.language}</span>
                             <span className="flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" />Sin costo</span>
                           </div>
-                          <button className="mt-0.5 self-start text-xs text-[#4f46e5] hover:underline">
-                            Ver más info →
-                          </button>
                         </div>
                         {/* CTA */}
-                        <button className="shrink-0 rounded-full bg-[#1d4ed8] px-6 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors whitespace-nowrap">
-                          Agendar Webinar
-                        </button>
+                        <div className="flex shrink-0 items-center gap-3">
+                          <button className="text-sm font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
+                            Ver más información
+                          </button>
+                          <button className="rounded-full bg-[#1d4ed8] px-6 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors whitespace-nowrap">
+                            Agendar Webinar
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
