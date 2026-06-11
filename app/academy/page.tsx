@@ -338,7 +338,7 @@ function AcademyContent() {
                                 <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700">
                                   Inscripto ✓
                                 </span>
-                                <button onClick={() => openModal(w)} className="rounded-full border border-[#4f46e5] px-3 py-1.5 text-[11px] font-semibold text-[#4f46e5] hover:bg-[#eef0fe] transition-colors whitespace-nowrap">
+                                <button onClick={() => openModal(w)} className="rounded-full border border-[#4f46e5] px-6 py-2 text-sm font-semibold text-[#4f46e5] hover:bg-[#eef0fe] transition-colors whitespace-nowrap">
                                   Reenviar invitación
                                 </button>
                               </div>
@@ -389,7 +389,7 @@ function AcademyContent() {
                             <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700">
                               Inscripto ✓
                             </span>
-                            <button onClick={() => setSelectedSession(s)} className="rounded-full border border-[#4f46e5] px-3 py-1.5 text-[11px] font-semibold text-[#4f46e5] hover:bg-[#eef0fe] transition-colors whitespace-nowrap">
+                            <button onClick={() => setSelectedSession(s)} className="rounded-full border border-[#4f46e5] px-6 py-2 text-sm font-semibold text-[#4f46e5] hover:bg-[#eef0fe] transition-colors whitespace-nowrap">
                               Reenviar invitación
                             </button>
                           </div>
