@@ -265,7 +265,9 @@ function AcademyContent() {
                       {workshops.filter(w => registeredIds.has(w.id)).map(w => (
                         <div key={w.id} className="flex items-center justify-between gap-4 px-5 py-3.5">
                           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-600">
-                            <span className="font-semibold text-[#1e1b4b]">{w.day} {w.month}</span>
+                            <span className="font-semibold text-[#1e1b4b]">Botmaker 3.0</span>
+                            <span className="text-gray-300">·</span>
+                            <span className="text-xs text-gray-500">{w.day} {w.month} · {w.time}</span>
                             <span className="text-gray-300">·</span>
                             <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${
                               w.modality === "Virtual" ? "border-indigo-200 bg-indigo-50 text-[#4f46e5]" : "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -276,8 +278,6 @@ function AcademyContent() {
                             {w.modality === "Presencial" && (
                               <span className="text-xs text-gray-500">{w.city}, {w.country}</span>
                             )}
-                            <span className="text-gray-300">·</span>
-                            <span className="text-xs text-gray-500">{w.time}</span>
                           </div>
                           <button onClick={() => setCancelTarget(w)}
                             className="shrink-0 rounded-full border border-red-200 bg-white px-4 py-1.5 text-xs font-semibold text-red-500 transition-colors hover:bg-red-50">
