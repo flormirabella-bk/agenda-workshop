@@ -311,17 +311,19 @@ function AcademyContent() {
                             </div>
                             {/* Info */}
                             <div className="flex flex-1 flex-col gap-1.5 min-w-0">
-                              <p className="text-[15px] font-semibold text-[#1e1b4b]">Botmaker 3.0</p>
-                              <p className="text-sm text-gray-400 line-clamp-1">{WORKSHOP_DESCRIPTION}</p>
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
-                                <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{formatEventDate(w.day, w.month, w.time)}</span>
-                                <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-medium ${
+                              <div className="flex items-center gap-2">
+                                <p className="text-[15px] font-semibold text-[#1e1b4b]">Botmaker 3.0</p>
+                                <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${
                                   full ? "border-gray-200 bg-gray-100 text-gray-400"
                                   : w.modality === "Virtual" ? "border-indigo-200 bg-indigo-50 text-[#4f46e5]"
                                   : "border-emerald-200 bg-emerald-50 text-emerald-700"
                                 }`}>
                                   <ModalityIcon className="h-3 w-3" />{w.modality}
                                 </span>
+                              </div>
+                              <p className="text-sm text-gray-400 line-clamp-1">{WORKSHOP_DESCRIPTION}</p>
+                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                                <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{formatEventDate(w.day, w.month, w.time)}</span>
                                 {w.modality === "Presencial" && (
                                   <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{w.city}, {w.country}</span>
                                 )}
@@ -368,13 +370,15 @@ function AcademyContent() {
                         </div>
                         {/* Info */}
                         <div className="flex flex-1 flex-col gap-1.5 min-w-0">
-                          <p className="text-[15px] font-semibold text-[#1e1b4b]">{s.title}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-[15px] font-semibold text-[#1e1b4b]">{s.title}</p>
+                            <span className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-xs font-medium text-[#4f46e5]">
+                              <Video className="h-3 w-3" />Virtual
+                            </span>
+                          </div>
                           <p className="text-sm text-gray-400 line-clamp-1">{s.description}</p>
                           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
                             <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{formatEventDate(s.day, s.month, s.time)}</span>
-                            <span className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 font-medium text-[#4f46e5]">
-                              <Video className="h-3 w-3" />Virtual
-                            </span>
                             <span className="flex items-center gap-1"><Globe className="h-3.5 w-3.5" />{s.language}</span>
                             <span className="flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" />Sin costo</span>
                           </div>
