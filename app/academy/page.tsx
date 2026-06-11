@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Suspense } from "react"
 import { SiteHeader } from "@/components/site-header"
-import { Search, Clock, MapPin, Video, Globe, X, CheckCircle, Play, Calendar, DollarSign, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search, Clock, MapPin, Video, Globe, X, CheckCircle, Play, Calendar, DollarSign, ChevronLeft, ChevronRight, GraduationCap } from "lucide-react"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -109,6 +109,8 @@ function AcademyContent() {
   const [registeredIds, setRegisteredIds] = useState<Set<number>>(new Set())
   const [cancelTarget, setCancelTarget] = useState<Workshop | null>(null)
   const [carouselIdx, setCarouselIdx] = useState(0)
+  const [selectedSession, setSelectedSession] = useState<BotmakerSession | null>(null)
+  const [registeredSessionIds, setRegisteredSessionIds] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     const tab = searchParams.get("tab") as Tab
@@ -127,6 +129,12 @@ function AcademyContent() {
     if (!selectedWorkshop) return
     setRegisteredIds(prev => new Set([...prev, selectedWorkshop.id]))
     setSubmitted(true)
+  }
+
+  function confirmSession() {
+    if (!selectedSession) return
+    setRegisteredSessionIds(prev => new Set([...prev, selectedSession.id]))
+    setSelectedSession(null)
   }
 
   function confirmCancel() {
@@ -323,19 +331,23 @@ function AcademyContent() {
                               {urgent && <p className="text-xs font-semibold text-[#e11d48]">¡Solo {w.spots} cupos disponibles!</p>}
                             </div>
                             {/* CTA */}
-                            <div className="flex shrink-0 items-center gap-3">
-                              <button onClick={() => openModal(w)} className="text-sm font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
-                                Ver más información
-                              </button>
-                              <button disabled={full || registered} onClick={() => !full && !registered && openModal(w)}
-                                className={`rounded-full px-6 py-2 text-sm font-semibold transition-colors whitespace-nowrap ${
-                                  full ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                  : registered ? "border border-emerald-300 bg-emerald-50 text-emerald-700 cursor-default"
-                                  : "bg-[#1d4ed8] text-white hover:bg-[#1e40af]"
+                            {registered ? (
+                              <div className="shrink-0 flex flex-col items-end gap-1.5">
+                                <span className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700">
+                                  Inscripto ✓
+                                </span>
+                                <button onClick={() => openModal(w)} className="text-xs font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
+                                  Reenviar invitación
+                                </button>
+                              </div>
+                            ) : (
+                              <button disabled={full} onClick={() => !full && openModal(w)}
+                                className={`shrink-0 rounded-full px-6 py-2 text-sm font-semibold transition-colors whitespace-nowrap ${
+                                  full ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#1d4ed8] text-white hover:bg-[#1e40af]"
                                 }`}>
-                                {full ? "Sin cupos" : registered ? "Inscripto ✓" : "Inscribirse"}
+                                {full ? "Sin cupos" : "Inscribirse"}
                               </button>
-                            </div>
+                            )}
                           </div>
                         )
                       })}
@@ -368,14 +380,25 @@ function AcademyContent() {
                           </div>
                         </div>
                         {/* CTA */}
-                        <div className="flex shrink-0 items-center gap-3">
-                          <button className="text-sm font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
-                            Ver más información
-                          </button>
-                          <button className="rounded-full bg-[#1d4ed8] px-6 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors whitespace-nowrap">
-                            Agendar Webinar
-                          </button>
-                        </div>
+                        {registeredSessionIds.has(s.id) ? (
+                          <div className="shrink-0 flex flex-col items-end gap-1.5">
+                            <span className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700">
+                              Inscripto ✓
+                            </span>
+                            <button onClick={() => setSelectedSession(s)} className="text-xs font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
+                              Reenviar invitación
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex shrink-0 items-center gap-3">
+                            <button className="text-sm font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
+                              Ver más información
+                            </button>
+                            <button onClick={() => setSelectedSession(s)} className="rounded-full bg-[#1d4ed8] px-6 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors whitespace-nowrap">
+                              Agendar Webinar
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -448,92 +471,55 @@ function AcademyContent() {
       {/* ── Modal inscripción ── */}
       {selectedWorkshop && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm" onClick={closeModal}>
-          <div className={`relative w-full overflow-hidden rounded-2xl bg-white shadow-2xl ${submitted ? "max-w-sm" : "max-w-3xl"}`} onClick={e => e.stopPropagation()}>
-
-            <button onClick={closeModal} className="absolute right-4 top-4 z-10 rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 transition-colors">
-              <X className="h-5 w-5" />
-            </button>
+          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl" onClick={e => e.stopPropagation()}>
 
             {!submitted ? (
-              <div className="flex min-h-[420px]">
-
-                {/* Columna izquierda: imagen */}
-                <div className="relative w-[45%] shrink-0 overflow-hidden bg-[#7b82f0]">
-                  <div className="absolute -right-12 -top-12 h-56 w-56 rounded-full bg-white/10" />
-                  <div className="absolute right-10 top-16 h-36 w-36 rounded-full bg-white/10" />
-                  <div className="absolute -left-8 bottom-10 h-44 w-44 rounded-full bg-white/5" />
-                  <div className="absolute left-8 -bottom-10 h-28 w-28 rounded-full bg-white/10" />
-                  <div className="absolute inset-0 flex items-center justify-center p-8">
-                    <div className="w-full overflow-hidden rounded-xl bg-white/95 shadow-xl">
-                      <div className="flex items-center gap-2 bg-[#4f46e5] px-3 py-2">
-                        <div className="h-2 w-2 rounded-full bg-white/40" />
-                        <div className="h-1.5 flex-1 rounded-full bg-white/30" />
-                        <div className="h-2 w-2 rounded-full bg-white/40" />
-                      </div>
-                      <div className="flex flex-col gap-2 p-3">
-                        <div className="self-end rounded-xl rounded-tr-sm bg-[#4f46e5] px-3 py-1.5">
-                          <div className="h-1.5 w-20 rounded-full bg-white/70" />
-                        </div>
-                        <div className="self-start rounded-xl rounded-tl-sm bg-gray-100 px-3 py-1.5">
-                          <div className="h-1.5 w-28 rounded-full bg-gray-300" />
-                        </div>
-                        <div className="self-start rounded-xl rounded-tl-sm bg-gray-100 px-3 py-1.5">
-                          <div className="h-1.5 w-20 rounded-full bg-gray-300" />
-                        </div>
-                        <div className="self-end rounded-xl rounded-tr-sm bg-[#4f46e5] px-3 py-1.5">
-                          <div className="h-1.5 w-16 rounded-full bg-white/70" />
-                        </div>
-                        <div className="mt-1 flex items-center gap-1.5 self-start rounded-lg bg-[#eef0fe] px-2.5 py-1.5">
-                          <div className="h-4 w-4 rounded-full bg-[#4f46e5]/30" />
-                          <div className="h-1.5 w-16 rounded-full bg-[#4f46e5]/40" />
-                        </div>
-                      </div>
-                    </div>
+              <>
+                {/* Header */}
+                <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef0fe]">
+                    <GraduationCap className="h-5 w-5 text-[#4f46e5]" />
                   </div>
+                  <p className="flex-1 text-sm font-semibold text-[#1e1b4b]">Próximo entrenamiento</p>
+                  <button onClick={closeModal} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 transition-colors">
+                    <X className="h-4 w-4" />
+                  </button>
                 </div>
 
-                {/* Columna derecha: contenido */}
-                <div className="flex flex-1 flex-col justify-between p-8 pr-10">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-[#4f46e5]">Botmaker 3.0</p>
-                    <h3 className="mt-1.5 text-2xl font-bold text-[#1e1b4b]">Workshop en vivo</h3>
-
-                    <p className="mt-4 text-sm leading-relaxed text-gray-600">
-                      Presentamos una nueva plataforma 100% de agentes de IA con orquestador. A partir de ahora, gestionamos no solo conversaciones, sino procesos de negocio de principio a fin. Redefinimos el rol de los asesores de chat con un nuevo esquema de participación humana conocido como <span className="font-semibold text-[#1e1b4b]">"human in the loop"</span>.
-                    </p>
-
-                    {/* Detalles del evento */}
-                    <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-gray-500">
-                      <span className="flex items-center gap-1.5">
-                        <div className="flex h-8 w-8 shrink-0 flex-col items-center justify-center rounded-lg bg-[#eef0fe]">
-                          <span className="text-xs font-bold leading-none text-[#1e1b4b]">{selectedWorkshop.day}</span>
-                          <span className="text-[8px] font-semibold tracking-wide text-[#4f46e5]">{selectedWorkshop.month}</span>
-                        </div>
-                        <Clock className="h-3.5 w-3.5" />{formatEventDate(selectedWorkshop.day, selectedWorkshop.month, selectedWorkshop.time)}
-                      </span>
-                      <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-medium ${
-                        selectedWorkshop.modality === "Virtual" ? "border-indigo-200 bg-indigo-50 text-[#4f46e5]" : "border-emerald-200 bg-emerald-50 text-emerald-700"
-                      }`}>
-                        {selectedWorkshop.modality === "Virtual" ? <Video className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
-                        {selectedWorkshop.modality}
-                      </span>
-                      {selectedWorkshop.modality === "Presencial" && (
-                        <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{selectedWorkshop.city}, {selectedWorkshop.country}</span>
-                      )}
-                      <span className="font-medium text-[#16a34a]">Sin costo</span>
-                    </div>
+                {/* Body */}
+                <div className="px-6 py-5">
+                  <h3 className="text-xl font-bold text-[#1e1b4b]">Botmaker 3.0</h3>
+                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-gray-500">
+                    <span className="flex items-center gap-1 font-semibold text-[#1e1b4b]">{selectedWorkshop.day} {selectedWorkshop.month}</span>
+                    <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{selectedWorkshop.time}</span>
+                    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-medium ${
+                      selectedWorkshop.modality === "Virtual" ? "border-indigo-200 bg-indigo-50 text-[#4f46e5]" : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    }`}>
+                      {selectedWorkshop.modality === "Virtual" ? <Video className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
+                      {selectedWorkshop.modality}
+                    </span>
+                    {selectedWorkshop.modality === "Presencial" && (
+                      <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{selectedWorkshop.city}, {selectedWorkshop.country}</span>
+                    )}
+                    <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />Duración 120'</span>
+                    <span className="font-medium text-[#16a34a]">Sin costo</span>
                   </div>
-
-                  <div className="mt-6 flex flex-col gap-2">
-                    <button onClick={confirmRegistration} className="w-full rounded-xl bg-[#1d4ed8] py-3 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors">
-                      Confirmar inscripción
-                    </button>
-                    <button className="py-1 text-xs text-gray-400 hover:text-[#4f46e5] transition-colors">
-                      ¿Tenés dudas? Ver preguntas frecuentes →
-                    </button>
-                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-gray-500">{WORKSHOP_DESCRIPTION}</p>
+                  <button className="mt-3 text-sm text-gray-400 hover:text-[#4f46e5] transition-colors">
+                    ¿Tenés dudas? Ver preguntas frecuentes →
+                  </button>
                 </div>
-              </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-end gap-4 border-t border-gray-100 px-6 py-4">
+                  <button onClick={closeModal} className="text-sm font-medium text-gray-500 hover:text-[#1e1b4b] transition-colors">
+                    Cancelar
+                  </button>
+                  <button onClick={confirmRegistration} className="rounded-full bg-[#1d4ed8] px-5 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors">
+                    Confirmar inscripción
+                  </button>
+                </div>
+              </>
             ) : (
               <div className="flex flex-col items-center px-6 py-12 text-center">
                 <CheckCircle className="h-14 w-14 text-[#16a34a]" />
@@ -546,6 +532,53 @@ function AcademyContent() {
                 <button onClick={closeModal} className="mt-6 rounded-xl bg-[#1d4ed8] px-8 py-3 text-sm font-semibold text-white hover:bg-[#1e40af]">Listo</button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal session ── */}
+      {selectedSession && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm" onClick={() => setSelectedSession(null)}>
+          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl" onClick={e => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef0fe]">
+                <Video className="h-5 w-5 text-[#4f46e5]" />
+              </div>
+              <p className="flex-1 text-sm font-semibold text-[#1e1b4b]">Próxima Session</p>
+              <button onClick={() => setSelectedSession(null)} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 transition-colors">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5">
+              <h3 className="text-xl font-bold text-[#1e1b4b]">{selectedSession.title}</h3>
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-gray-500">
+                <span className="flex items-center gap-1 font-semibold text-[#1e1b4b]">{selectedSession.day} {selectedSession.month}</span>
+                <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{selectedSession.time}</span>
+                <span className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 font-medium text-[#4f46e5]">
+                  <Video className="h-3 w-3" />Virtual
+                </span>
+                <span className="flex items-center gap-1"><Globe className="h-3.5 w-3.5" />{selectedSession.language}</span>
+                <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />Duración 60'</span>
+                <span className="font-medium text-[#16a34a]">Sin costo</span>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-gray-500">{selectedSession.description}</p>
+              <button className="mt-3 text-sm text-gray-400 hover:text-[#4f46e5] transition-colors">
+                ¿Tenés dudas? Ver preguntas frecuentes →
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-4 border-t border-gray-100 px-6 py-4">
+              <button onClick={() => setSelectedSession(null)} className="text-sm font-medium text-gray-500 hover:text-[#1e1b4b] transition-colors">
+                Cancelar
+              </button>
+              <button onClick={confirmSession} className="rounded-full bg-[#1d4ed8] px-5 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors">
+                Confirmar inscripción
+              </button>
+            </div>
           </div>
         </div>
       )}
