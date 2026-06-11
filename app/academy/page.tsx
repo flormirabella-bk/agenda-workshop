@@ -333,10 +333,10 @@ function AcademyContent() {
                             {/* CTA */}
                             {registered ? (
                               <div className="shrink-0 flex flex-col items-end gap-1.5">
-                                <span className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700">
+                                <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700">
                                   Inscripto ✓
                                 </span>
-                                <button onClick={() => openModal(w)} className="text-xs font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
+                                <button onClick={() => openModal(w)} className="rounded-full border border-[#4f46e5] px-3 py-1.5 text-[11px] font-semibold text-[#4f46e5] hover:bg-[#eef0fe] transition-colors whitespace-nowrap">
                                   Reenviar invitación
                                 </button>
                               </div>
@@ -382,10 +382,10 @@ function AcademyContent() {
                         {/* CTA */}
                         {registeredSessionIds.has(s.id) ? (
                           <div className="shrink-0 flex flex-col items-end gap-1.5">
-                            <span className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700">
+                            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700">
                               Inscripto ✓
                             </span>
-                            <button onClick={() => setSelectedSession(s)} className="text-xs font-medium text-[#4f46e5] hover:underline whitespace-nowrap">
+                            <button onClick={() => setSelectedSession(s)} className="rounded-full border border-[#4f46e5] px-3 py-1.5 text-[11px] font-semibold text-[#4f46e5] hover:bg-[#eef0fe] transition-colors whitespace-nowrap">
                               Reenviar invitación
                             </button>
                           </div>
