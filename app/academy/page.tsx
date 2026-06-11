@@ -364,6 +364,9 @@ function AcademyContent() {
                             <span className="flex items-center gap-1"><Globe className="h-3.5 w-3.5" />{s.language}</span>
                             <span className="flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" />Sin costo</span>
                           </div>
+                          <button className="mt-0.5 self-start text-xs text-[#4f46e5] hover:underline">
+                            Ver más info →
+                          </button>
                         </div>
                         {/* CTA */}
                         <button className="shrink-0 rounded-full bg-[#1d4ed8] px-6 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors whitespace-nowrap">
