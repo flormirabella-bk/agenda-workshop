@@ -17,8 +17,12 @@ export function UpcomingEvents() {
 
           {/* Content */}
           <div className="relative max-w-lg">
-            <p className="text-sm font-semibold uppercase tracking-widest text-white/60">Botmaker 3.0</p>
-            <h2 className="mt-1 text-3xl font-bold text-white">Workshop</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-3xl font-bold text-white">Botmaker 3.0</h2>
+              <span className="rounded-full border border-white/40 bg-white/15 px-3 py-1 text-sm font-semibold text-white">
+                Workshop
+              </span>
+            </div>
             <p className="mt-3 text-base text-white/75 leading-relaxed">
               Capacitate en vivo con el equipo de Botmaker. Talleres presenciales y virtuales, sin costo, en Argentina, Colombia y México.
             </p>
