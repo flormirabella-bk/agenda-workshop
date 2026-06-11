@@ -475,7 +475,7 @@ function AcademyContent() {
       {/* ── Modal inscripción ── */}
       {selectedWorkshop && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm" onClick={closeModal}>
-          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl" onClick={e => e.stopPropagation()}>
 
             {!submitted ? (
               <>
@@ -493,20 +493,17 @@ function AcademyContent() {
                 {/* Body */}
                 <div className="px-6 py-5">
                   <h3 className="text-xl font-bold text-[#1e1b4b]">Botmaker 3.0</h3>
-                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-gray-500">
-                    <span className="flex items-center gap-1 font-semibold text-[#1e1b4b]">{selectedWorkshop.day} {selectedWorkshop.month}</span>
-                    <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{selectedWorkshop.time}</span>
-                    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-medium ${
-                      selectedWorkshop.modality === "Virtual" ? "border-indigo-200 bg-indigo-50 text-[#4f46e5]" : "border-emerald-200 bg-emerald-50 text-emerald-700"
-                    }`}>
-                      {selectedWorkshop.modality === "Virtual" ? <Video className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
+                  <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
+                    <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{selectedWorkshop.day} {selectedWorkshop.month}</span>
+                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{selectedWorkshop.time}</span>
+                    <span className="flex items-center gap-1.5">
+                      {selectedWorkshop.modality === "Virtual" ? <Video className="h-3.5 w-3.5" /> : <MapPin className="h-3.5 w-3.5" />}
                       {selectedWorkshop.modality}
                     </span>
                     {selectedWorkshop.modality === "Presencial" && (
-                      <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{selectedWorkshop.city}, {selectedWorkshop.country}</span>
+                      <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{selectedWorkshop.city}, {selectedWorkshop.country}</span>
                     )}
-                    <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />Duración 120'</span>
-                    <span className="font-medium text-[#16a34a]">Sin costo</span>
+                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />Duración 120'</span>
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-gray-500">{WORKSHOP_DESCRIPTION}</p>
                   <button className="mt-3 text-sm text-gray-400 hover:text-[#4f46e5] transition-colors">
@@ -520,7 +517,7 @@ function AcademyContent() {
                     Cancelar
                   </button>
                   <button onClick={confirmRegistration} className="rounded-full bg-[#1d4ed8] px-5 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors">
-                    Confirmar inscripción
+                    Confirmar
                   </button>
                 </div>
               </>
@@ -543,13 +540,13 @@ function AcademyContent() {
       {/* ── Modal session ── */}
       {selectedSession && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm" onClick={() => setSelectedSession(null)}>
-          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl" onClick={e => e.stopPropagation()}>
             {/* Header */}
             <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef0fe]">
-                <Video className="h-5 w-5 text-[#4f46e5]" />
+                <GraduationCap className="h-5 w-5 text-[#4f46e5]" />
               </div>
-              <p className="flex-1 text-sm font-semibold text-[#1e1b4b]">Próxima Session</p>
+              <p className="flex-1 text-sm font-semibold text-[#1e1b4b]">Próximo entrenamiento</p>
               <button onClick={() => setSelectedSession(null)} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 transition-colors">
                 <X className="h-4 w-4" />
               </button>
@@ -558,15 +555,13 @@ function AcademyContent() {
             {/* Body */}
             <div className="px-6 py-5">
               <h3 className="text-xl font-bold text-[#1e1b4b]">{selectedSession.title}</h3>
-              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-gray-500">
-                <span className="flex items-center gap-1 font-semibold text-[#1e1b4b]">{selectedSession.day} {selectedSession.month}</span>
-                <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{selectedSession.time}</span>
-                <span className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 font-medium text-[#4f46e5]">
-                  <Video className="h-3 w-3" />Virtual
-                </span>
-                <span className="flex items-center gap-1"><Globe className="h-3.5 w-3.5" />{selectedSession.language}</span>
-                <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />Duración 60'</span>
-                <span className="font-medium text-[#16a34a]">Sin costo</span>
+              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
+                <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{selectedSession.day} {selectedSession.month}</span>
+                <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{selectedSession.time}</span>
+                <span className="flex items-center gap-1.5"><Video className="h-3.5 w-3.5" />Virtual</span>
+                <span className="flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" />{selectedSession.language}</span>
+                <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />Duración 60'</span>
+                <span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" />Sin costo</span>
               </div>
               <p className="mt-4 text-sm leading-relaxed text-gray-500">{selectedSession.description}</p>
               <button className="mt-3 text-sm text-gray-400 hover:text-[#4f46e5] transition-colors">
@@ -580,7 +575,7 @@ function AcademyContent() {
                 Cancelar
               </button>
               <button onClick={confirmSession} className="rounded-full bg-[#1d4ed8] px-5 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors">
-                Confirmar inscripción
+                Confirmar
               </button>
             </div>
           </div>

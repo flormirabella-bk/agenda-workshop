@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import { SiteHeader } from "@/components/site-header"
-import { ArrowRight, Bot, GitBranch, Users, Bell, Clock, Video, MapPin, Smartphone } from "lucide-react"
+import { ArrowRight, Bot, GitBranch, Users, Bell, Clock, Video, MapPin, Smartphone, X, GraduationCap, Globe, DollarSign, Calendar } from "lucide-react"
 import Link from "next/link"
 
 // ─── Action cards ──────────────────────────────────────────────────────────────
@@ -62,6 +63,8 @@ type AgendaEvent = {
   title: string; city?: string; country?: string
   modality: "Presencial" | "Virtual"
   btnLabel: string; btnState: BtnState
+  duration: string; level: string; description: string
+  spots?: number
 }
 
 const agendaEvents: AgendaEvent[] = [
@@ -69,31 +72,43 @@ const agendaEvents: AgendaEvent[] = [
     id: 1, type: "Workshop", day: "19", month: "JUN", time: "10:00 AM",
     title: "Botmaker 3.0", modality: "Presencial", city: "Buenos Aires", country: "Argentina",
     btnLabel: "Inscribirse", btnState: "primary",
+    duration: "120'", level: "Todos los niveles", spots: 2,
+    description: "Conocé las novedades de Botmaker 3.0 en un taller interactivo en vivo con nuestro equipo de expertos.",
   },
   {
     id: 2, type: "Workshop", day: "26", month: "JUN", time: "3:00 PM",
     title: "Botmaker 3.0", modality: "Virtual",
     btnLabel: "Inscribirse", btnState: "primary",
+    duration: "120'", level: "Todos los niveles",
+    description: "Conocé las novedades de Botmaker 3.0 en un taller interactivo en vivo con nuestro equipo de expertos.",
   },
   {
     id: 3, type: "Workshop", day: "03", month: "JUL", time: "11:00 AM",
     title: "Botmaker 3.0", modality: "Presencial", city: "Ciudad de México", country: "México",
     btnLabel: "Sin cupos", btnState: "disabled",
-  },
-  {
-    id: 4, type: "Workshop", day: "10", month: "JUL", time: "4:00 PM",
-    title: "Botmaker 3.0", modality: "Presencial", city: "Buenos Aires", country: "Argentina",
-    btnLabel: "Inscribirse", btnState: "primary",
+    duration: "120'", level: "Todos los niveles",
+    description: "Conocé las novedades de Botmaker 3.0 en un taller interactivo en vivo con nuestro equipo de expertos.",
   },
   {
     id: 10, type: "Session", day: "15", month: "JUL", time: "10:00 AM",
     title: "Cómo diseñar tu primer agente", modality: "Virtual",
     btnLabel: "Agendar", btnState: "primary",
+    duration: "60'", level: "Intermedio",
+    description: "Conocé los aspectos básicos de la configuración inicial de un chatbot y cómo potenciar tus conversaciones.",
   },
   {
     id: 11, type: "Session", day: "22", month: "JUL", time: "3:00 PM",
     title: "Conecta canales como WhatsApp e Instagram", modality: "Virtual",
     btnLabel: "Agendar", btnState: "primary",
+    duration: "60'", level: "Intermedio",
+    description: "Aprendé a conectar los principales canales de comunicación y usá agentes multicanales para potenciar tus conversaciones.",
+  },
+  {
+    id: 12, type: "Session", day: "05", month: "AGO", time: "11:00 AM",
+    title: "Automatización avanzada con IA", modality: "Virtual",
+    btnLabel: "Agendar", btnState: "primary",
+    duration: "60'", level: "Intermedio",
+    description: "Estrategias avanzadas para automatizar flujos de conversación con inteligencia artificial en Botmaker.",
   },
 ]
 
@@ -107,6 +122,9 @@ const helpLinks = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function HomeCPage() {
+  const [selectedEvent, setSelectedEvent] = useState<AgendaEvent | null>(null)
+  const [confirmedIds, setConfirmedIds] = useState<Set<number>>(new Set())
+
   return (
     <main className="min-h-screen bg-[#f8f9fc]">
       <SiteHeader />
@@ -230,20 +248,37 @@ export default function HomeCPage() {
                       </span>
                       {event.city && <span>{event.city}</span>}
                     </div>
+                    {event.spots !== undefined && event.spots <= 2 && (
+                      <p className="text-[10px] font-semibold text-[#e11d48]">¡Solo {event.spots} cupos disponibles!</p>
+                    )}
                   </div>
 
                   {/* CTA */}
-                  <button disabled={event.btnState === "disabled"} className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold whitespace-nowrap ${
-                    event.btnState === "primary"
-                      ? "bg-[#1d4ed8] text-white hover:bg-[#1e40af] transition-colors"
-                      : event.btnState === "secondary"
-                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                      : event.btnState === "disabled"
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors"
-                  }`}>
-                    {event.btnLabel}
-                  </button>
+                  {confirmedIds.has(event.id) ? (
+                    <div className="shrink-0 flex flex-col items-end gap-1.5">
+                      <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+                        Inscripto ✓
+                      </span>
+                      <button
+                        onClick={() => setSelectedEvent(event)}
+                        className="rounded-full border border-[#4f46e5] px-3 py-1.5 text-[11px] font-semibold text-[#4f46e5] hover:bg-[#eef0fe] transition-colors whitespace-nowrap">
+                        Reenviar invitación
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      disabled={event.btnState === "disabled"}
+                      onClick={() => event.btnState !== "disabled" && setSelectedEvent(event)}
+                      className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold whitespace-nowrap ${
+                        event.btnState === "primary"
+                          ? "bg-[#1d4ed8] text-white hover:bg-[#1e40af] transition-colors"
+                          : event.btnState === "disabled"
+                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                          : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors"
+                      }`}>
+                      {event.btnLabel}
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -290,6 +325,75 @@ export default function HomeCPage() {
 
         </div>
       </div>
+
+      {/* ── Modal evento ── */}
+      {selectedEvent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm" onClick={() => setSelectedEvent(null)}>
+          <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl" onClick={e => e.stopPropagation()}>
+
+            {/* Header */}
+            <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef0fe]">
+                <GraduationCap className="h-5 w-5 text-[#4f46e5]" />
+              </div>
+              <p className="flex-1 text-sm font-semibold text-[#1e1b4b]">Próximo entrenamiento</p>
+              <button onClick={() => setSelectedEvent(null)} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 transition-colors">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5">
+              <h3 className="text-xl font-bold text-[#1e1b4b]">{selectedEvent.title}</h3>
+              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
+                {selectedEvent.type === "Workshop" ? (
+                  <>
+                    <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{selectedEvent.day} {selectedEvent.month}</span>
+                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{selectedEvent.time}</span>
+                    <span className="flex items-center gap-1.5">
+                      {selectedEvent.modality === "Virtual" ? <Video className="h-3.5 w-3.5" /> : <MapPin className="h-3.5 w-3.5" />}
+                      {selectedEvent.modality}
+                    </span>
+                    {selectedEvent.city && (
+                      <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{selectedEvent.city}, {selectedEvent.country}</span>
+                    )}
+                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />Duración {selectedEvent.duration}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{selectedEvent.time}</span>
+                    <span className="flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" />Español</span>
+                    <span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" />Sin costo</span>
+                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />Duración {selectedEvent.duration}</span>
+                    <span className="flex items-center gap-1.5"><GraduationCap className="h-3.5 w-3.5" />{selectedEvent.level}</span>
+                  </>
+                )}
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-gray-500">{selectedEvent.description}</p>
+              <button className="mt-3 text-sm text-gray-400 hover:text-[#4f46e5] transition-colors">
+                ¿Tenés dudas? Ver preguntas frecuentes →
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-4 border-t border-gray-100 px-6 py-4">
+              <button onClick={() => setSelectedEvent(null)} className="text-sm font-medium text-gray-500 hover:text-[#1e1b4b] transition-colors">
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  setConfirmedIds(prev => new Set([...prev, selectedEvent.id]))
+                  setSelectedEvent(null)
+                }}
+                className="rounded-full bg-[#1d4ed8] px-5 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors">
+                Confirmar
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </main>
   )
 }
