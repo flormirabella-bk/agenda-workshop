@@ -493,16 +493,13 @@ function AcademyContent() {
                 {/* Body */}
                 <div className="px-6 py-5">
                   <h3 className="text-xl font-bold text-[#1e1b4b]">Botmaker 3.0</h3>
-                  <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
+                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
                     <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{selectedWorkshop.day} {selectedWorkshop.month}</span>
                     <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{selectedWorkshop.time}</span>
                     <span className="flex items-center gap-1.5">
                       {selectedWorkshop.modality === "Virtual" ? <Video className="h-3.5 w-3.5" /> : <MapPin className="h-3.5 w-3.5" />}
-                      {selectedWorkshop.modality}
+                      {selectedWorkshop.modality}{selectedWorkshop.modality === "Presencial" && ` · ${selectedWorkshop.city}, ${selectedWorkshop.country}`}
                     </span>
-                    {selectedWorkshop.modality === "Presencial" && (
-                      <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{selectedWorkshop.city}, {selectedWorkshop.country}</span>
-                    )}
                     <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />Duración 120'</span>
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-gray-500">{WORKSHOP_DESCRIPTION}</p>

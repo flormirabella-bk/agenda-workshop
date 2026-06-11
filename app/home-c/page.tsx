@@ -345,18 +345,15 @@ export default function HomeCPage() {
             {/* Body */}
             <div className="px-6 py-5">
               <h3 className="text-xl font-bold text-[#1e1b4b]">{selectedEvent.title}</h3>
-              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
                 {selectedEvent.type === "Workshop" ? (
                   <>
                     <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{selectedEvent.day} {selectedEvent.month}</span>
                     <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{selectedEvent.time}</span>
                     <span className="flex items-center gap-1.5">
                       {selectedEvent.modality === "Virtual" ? <Video className="h-3.5 w-3.5" /> : <MapPin className="h-3.5 w-3.5" />}
-                      {selectedEvent.modality}
+                      {selectedEvent.modality}{selectedEvent.city && ` · ${selectedEvent.city}, ${selectedEvent.country}`}
                     </span>
-                    {selectedEvent.city && (
-                      <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{selectedEvent.city}, {selectedEvent.country}</span>
-                    )}
                     <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />Duración {selectedEvent.duration}</span>
                   </>
                 ) : (
