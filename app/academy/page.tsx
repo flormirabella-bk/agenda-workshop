@@ -493,14 +493,14 @@ function AcademyContent() {
                 {/* Body */}
                 <div className="px-6 py-5">
                   <h3 className="text-xl font-bold text-[#1e1b4b]">Botmaker 3.0</h3>
-                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
-                    <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{selectedWorkshop.day} {selectedWorkshop.month}</span>
-                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{selectedWorkshop.time}</span>
-                    <span className="flex items-center gap-1.5">
-                      {selectedWorkshop.modality === "Virtual" ? <Video className="h-3.5 w-3.5" /> : <MapPin className="h-3.5 w-3.5" />}
+                  <div className="mt-3 flex flex-nowrap items-center gap-x-3 text-[11px] font-medium text-[#4f46e5] overflow-hidden">
+                    <span className="flex shrink-0 items-center gap-1"><Calendar className="h-3 w-3" />{selectedWorkshop.day} {selectedWorkshop.month}</span>
+                    <span className="flex shrink-0 items-center gap-1"><Clock className="h-3 w-3" />{selectedWorkshop.time}</span>
+                    <span className="flex shrink-0 items-center gap-1">
+                      {selectedWorkshop.modality === "Virtual" ? <Video className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
                       {selectedWorkshop.modality}{selectedWorkshop.modality === "Presencial" && ` · ${selectedWorkshop.city}, ${selectedWorkshop.country}`}
                     </span>
-                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />Duración 120'</span>
+                    <span className="flex shrink-0 items-center gap-1"><Clock className="h-3 w-3" />Duración 120'</span>
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-gray-500">{WORKSHOP_DESCRIPTION}</p>
                   <button className="mt-3 text-sm text-gray-400 hover:text-[#4f46e5] transition-colors">
@@ -552,13 +552,13 @@ function AcademyContent() {
             {/* Body */}
             <div className="px-6 py-5">
               <h3 className="text-xl font-bold text-[#1e1b4b]">{selectedSession.title}</h3>
-              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs font-medium text-[#4f46e5]">
-                <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{selectedSession.day} {selectedSession.month}</span>
-                <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{selectedSession.time}</span>
-                <span className="flex items-center gap-1.5"><Video className="h-3.5 w-3.5" />Virtual</span>
-                <span className="flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" />{selectedSession.language}</span>
-                <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />Duración 60'</span>
-                <span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" />Sin costo</span>
+              <div className="mt-3 flex flex-nowrap items-center gap-x-3 text-[11px] font-medium text-[#4f46e5] overflow-hidden">
+                <span className="flex shrink-0 items-center gap-1"><Calendar className="h-3 w-3" />{selectedSession.day} {selectedSession.month}</span>
+                <span className="flex shrink-0 items-center gap-1"><Clock className="h-3 w-3" />{selectedSession.time}</span>
+                <span className="flex shrink-0 items-center gap-1"><Video className="h-3 w-3" />Virtual</span>
+                <span className="flex shrink-0 items-center gap-1"><Globe className="h-3 w-3" />{selectedSession.language}</span>
+                <span className="flex shrink-0 items-center gap-1"><Clock className="h-3 w-3" />Duración 60'</span>
+                <span className="flex shrink-0 items-center gap-1"><DollarSign className="h-3 w-3" />Sin costo</span>
               </div>
               <p className="mt-4 text-sm leading-relaxed text-gray-500">{selectedSession.description}</p>
               <button className="mt-3 text-sm text-gray-400 hover:text-[#4f46e5] transition-colors">
