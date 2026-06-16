@@ -439,7 +439,6 @@ function AcademyContent() {
                         </div>
                       </div>
                     ))}
-                  </div>
                 </div>
               </div>
 
