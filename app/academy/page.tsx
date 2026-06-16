@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Suspense } from "react"
 import { SiteHeader } from "@/components/site-header"
-import { Search, Clock, MapPin, Video, Globe, X, CheckCircle, Play, Calendar, DollarSign, ChevronLeft, ChevronRight, GraduationCap } from "lucide-react"
+import { Search, Clock, MapPin, Video, Globe, X, CheckCircle, Play, Calendar, DollarSign, GraduationCap } from "lucide-react"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -108,7 +108,6 @@ function AcademyContent() {
   const [submitted, setSubmitted] = useState(false)
   const [registeredIds, setRegisteredIds] = useState<Set<number>>(new Set())
   const [cancelTarget, setCancelTarget] = useState<Workshop | null>(null)
-  const [carouselIdx, setCarouselIdx] = useState(0)
   const [selectedSession, setSelectedSession] = useState<BotmakerSession | null>(null)
   const [registeredSessionIds, setRegisteredSessionIds] = useState<Set<number>>(new Set())
 
@@ -410,41 +409,18 @@ function AcademyContent() {
 
               </div>
 
-              {/* ── Sesiones anteriores (carousel) ── */}
+              {/* ── Sesiones anteriores (grid) ── */}
               <div className="mt-12 border-t border-gray-100 pt-10">
-                <div className="mb-6 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-xl font-bold text-[#1e1b4b]">Sesiones anteriores</h2>
-                    <p className="mt-0.5 text-sm text-gray-400">Sesiones grabadas disponibles cuando quieras.</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setCarouselIdx(i => Math.max(0, i - 1))}
-                      disabled={carouselIdx === 0}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition-colors"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => setCarouselIdx(i => Math.min(pastVideos.length - 3, i + 1))}
-                      disabled={carouselIdx >= pastVideos.length - 3}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition-colors"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </button>
-                  </div>
+                <div className="mb-6">
+                  <h2 className="text-xl font-bold text-[#1e1b4b]">Sesiones anteriores</h2>
+                  <p className="mt-0.5 text-sm text-gray-400">Sesiones grabadas disponibles cuando quieras.</p>
                 </div>
 
-                <div className="overflow-hidden">
-                  <div
-                    className="flex gap-5 transition-transform duration-300 ease-in-out"
-                    style={{ transform: `translateX(calc(${-carouselIdx} * (100% + 20px) / 3))` }}
-                  >
+                <div className="grid grid-cols-3 gap-5">
                     {pastVideos.map(v => (
                       <div
                         key={v.id}
-                        className="flex-none overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
-                        style={{ width: "calc((100% - 40px) / 3)" }}
+                        className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
                       >
                         <div className="flex h-40 items-center justify-center bg-[#eef0fe]">
                           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#4f46e5]">
