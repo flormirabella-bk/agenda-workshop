@@ -2,395 +2,231 @@
 
 import { useState } from "react"
 import { SiteHeader } from "@/components/site-header"
-import { ArrowRight, Bot, GitBranch, Users, Bell, Clock, Video, MapPin, Smartphone, X, GraduationCap, Globe, DollarSign, Calendar } from "lucide-react"
 import Link from "next/link"
+import {
+  ArrowLeftRight, Bot, MessageSquare, Megaphone,
+  Zap, Mail, Phone, MessageCircle, Ticket, Users,
+  ChevronDown,
+} from "lucide-react"
 
-// ─── Action cards ──────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const actionCards = [
-  {
-    icon: Bot,
-    title: "Diseñar agentes de IA",
-    description: "Creá y configurá agentes inteligentes desde cero.",
-    badge: "Agente de IA",
-    count: 3,
-    color: "bg-violet-50",
-    iconColor: "text-violet-500",
-  },
-  {
-    icon: GitBranch,
-    title: "Diseñar bots con Flujos",
-    description: "Armá conversaciones con el diseñador visual de flujos.",
-    tags: ["Creativo", "Métricas", "Callbots"],
-    color: "bg-blue-50",
-    iconColor: "text-blue-500",
-  },
-  {
-    icon: Users,
-    title: "Asistir usuarios",
-    description: "Respondé conversaciones y gestioná la atención humana.",
-    tags: ["Conversaciones", "Métricas", "Callbots"],
-    color: "bg-emerald-50",
-    iconColor: "text-emerald-500",
-  },
-  {
-    icon: Bell,
-    title: "Enviar notificaciones",
-    description: "Lanzá campañas proactivas a tus usuarios.",
-    badge: "Notification engine",
-    color: "bg-amber-50",
-    iconColor: "text-amber-500",
-  },
-]
-
-// ─── Bots ─────────────────────────────────────────────────────────────────────
-
-const bots = [
-  { id: 1, name: "Jouranlo Balla-Kalla",  type: "Agente AI",    dot: "bg-emerald-400", date: "Ago 8, 2024"  },
-  { id: 2, name: "Flusama Bella-Kalla",   type: "Dispensaries", dot: "bg-orange-400",  date: "Sep 2, 2024"  },
-  { id: 3, name: "Orquesta Bot 1",        type: "Orquestador",  dot: "bg-blue-400",    date: "Oct 14, 2024" },
-  { id: 4, name: "Demo BQ2",             type: "Bot",          dot: "bg-violet-400",  date: "Nov 1, 2024"  },
-  { id: 5, name: "Montoya Restaurants",  type: "Bot",          dot: "bg-teal-400",    date: "Nov 8, 2024"  },
-]
-
-// ─── Agenda ───────────────────────────────────────────────────────────────────
-
-type EventType = "Workshop" | "Session"
-type BtnState  = "primary" | "secondary" | "outline" | "disabled"
-
-type AgendaEvent = {
-  id: number; type: EventType; day: string; month: string; time: string
-  title: string; city?: string; country?: string
-  modality: "Presencial" | "Virtual"
-  btnLabel: string; btnState: BtnState
-  duration: string; level: string; description: string
-  spots?: number
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return "Buenos días"
+  if (h < 18) return "Buenas tardes"
+  return "Buenas noches"
 }
 
-const agendaEvents: AgendaEvent[] = [
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const quickActions = [
   {
-    id: 1, type: "Workshop", day: "19", month: "JUN", time: "10:00 AM",
-    title: "Botmaker 3.0", modality: "Presencial", city: "Buenos Aires", country: "Argentina",
-    btnLabel: "Inscribirse", btnState: "primary",
-    duration: "120'", level: "Todos los niveles", spots: 2,
-    description: "Conocé las novedades de Botmaker 3.0 en un taller interactivo en vivo con nuestro equipo de expertos.",
+    id: 1,
+    Icon: ArrowLeftRight,
+    badge: "NUEVO",
+    title: "Diseñar agentes de IA",
+    description: "Crea, modifica y administra agentes y orquestadores",
+    cta: "Ir a Agentes de IA",
+    tags: [
+      { label: "Chatbots",  Icon: MessageSquare },
+      { label: "Mailbots",  Icon: Mail },
+      { label: "Callbots",  Icon: Phone },
+    ],
   },
   {
-    id: 2, type: "Workshop", day: "26", month: "JUN", time: "3:00 PM",
-    title: "Botmaker 3.0", modality: "Virtual",
-    btnLabel: "Inscribirse", btnState: "primary",
-    duration: "120'", level: "Todos los niveles",
-    description: "Conocé las novedades de Botmaker 3.0 en un taller interactivo en vivo con nuestro equipo de expertos.",
+    id: 2,
+    Icon: Bot,
+    title: "Diseñar bots con flujos",
+    description: "Diseña bots basados en flujos y herramientas generativas.",
+    cta: "Ir a Bot Designer",
+    tags: [
+      { label: "Chatbots",  Icon: MessageSquare },
+      { label: "Mailbots",  Icon: Mail },
+      { label: "Callbots",  Icon: Phone },
+    ],
   },
   {
-    id: 3, type: "Workshop", day: "03", month: "JUL", time: "11:00 AM",
-    title: "Botmaker 3.0", modality: "Presencial", city: "Ciudad de México", country: "México",
-    btnLabel: "Sin cupos", btnState: "disabled",
-    duration: "120'", level: "Todos los niveles",
-    description: "Conocé las novedades de Botmaker 3.0 en un taller interactivo en vivo con nuestro equipo de expertos.",
+    id: 3,
+    Icon: MessageSquare,
+    title: "Atender usuarios",
+    description: "Responde y gestiona conversaciones en tiempo real.",
+    cta: "Ir a Atención",
+    tags: [
+      { label: "Chats",      Icon: MessageCircle },
+      { label: "Tickets",    Icon: Ticket },
+      { label: "Contactos",  Icon: Users },
+    ],
   },
   {
-    id: 10, type: "Session", day: "15", month: "JUL", time: "10:00 AM",
-    title: "Cómo diseñar tu primer agente", modality: "Virtual",
-    btnLabel: "Agendar", btnState: "primary",
-    duration: "60'", level: "Intermedio",
-    description: "Conocé los aspectos básicos de la configuración inicial de un chatbot y cómo potenciar tus conversaciones.",
-  },
-  {
-    id: 11, type: "Session", day: "22", month: "JUL", time: "3:00 PM",
-    title: "Conecta canales como WhatsApp e Instagram", modality: "Virtual",
-    btnLabel: "Agendar", btnState: "primary",
-    duration: "60'", level: "Intermedio",
-    description: "Aprendé a conectar los principales canales de comunicación y usá agentes multicanales para potenciar tus conversaciones.",
-  },
-  {
-    id: 12, type: "Session", day: "05", month: "AGO", time: "11:00 AM",
-    title: "Automatización avanzada con IA", modality: "Virtual",
-    btnLabel: "Agendar", btnState: "primary",
-    duration: "60'", level: "Intermedio",
-    description: "Estrategias avanzadas para automatizar flujos de conversación con inteligencia artificial en Botmaker.",
+    id: 4,
+    Icon: Megaphone,
+    title: "Enviar notificaciones",
+    description: "Gestiona campañas y notificaciones masivas.",
+    cta: "Ir a Notificaciones",
+    tags: [
+      { label: "Notifications engine", Icon: Megaphone },
+    ],
   },
 ]
 
-const helpLinks = [
-  "Primeros pasos",
-  "Crear un agente de IA",
-  "Conectar canales",
-  "Notificaciones masivas",
+const allBots = [
+  { id: 1, name: "Bot Reco",           date: "09/06/2026", type: "chat" },
+  { id: 2, name: "Luis mailbot test",  date: "18/05/2026", type: "mail" },
+  { id: 3, name: "Luis test 2",        date: "15/05/2026", type: "chat" },
+  { id: 4, name: "Agente soporte",     date: "10/05/2026", type: "chat" },
+  { id: 5, name: "Bot ventas MX",      date: "02/05/2026", type: "chat" },
+]
+
+const ayudaLinks = [
+  { label: "Primeros pasos",          href: "#" },
+  { label: "Centro de ayuda",         href: "#" },
+  { label: "Monitor de servicios",    href: "#" },
+  { label: "Webinar de Bot Designer", href: "#" },
+  { label: "Lanzamiento de Mailbots", href: "#" },
+  { label: "Botmaker Academy",        href: "/academy" },
 ]
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function HomeCPage() {
-  const [selectedEvent, setSelectedEvent] = useState<AgendaEvent | null>(null)
-  const [confirmedIds, setConfirmedIds] = useState<Set<number>>(new Set())
+  const [showAll, setShowAll] = useState(false)
+  const visibleBots = showAll ? allBots : allBots.slice(0, 3)
 
   return (
-    <main className="min-h-screen bg-[#f8f9fc]">
+    <main className="min-h-screen bg-[#f5f7fb]">
       <SiteHeader />
 
-      <div className="mx-auto max-w-[1400px] px-6 py-10">
+      <div className="mx-auto max-w-[1200px] px-6 py-10">
 
         {/* ── Greeting ── */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#1e1b4b]">Buenos días, Gonzalo.</h1>
-          <p className="mt-0.5 text-2xl font-semibold text-[#1e1b4b]">¿Qué quieres hacer hoy?</p>
-          <p className="mt-2 max-w-xl text-sm text-gray-400 leading-relaxed">
-            Un lugar para diseñar agentes inteligentes, darle una buena experiencia a tus usuarios y siempre estar al tanto de tus campañas.
-          </p>
+          <h1 className="text-[28px] font-bold text-[#1a1a2e]">{getGreeting()}, Florencia</h1>
+          <p className="mt-0.5 text-lg font-semibold text-[#4f46e5]">¿Qué deseas hacer hoy?</p>
         </div>
 
-        {/* ── Action cards ── */}
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {actionCards.map((card) => {
-            const Icon = card.icon
-            return (
-              <a key={card.title} href="#"
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
-                {/* Top colored area */}
-                <div className={`relative flex h-24 items-center justify-center ${card.color}`}>
-                  {card.count && (
-                    <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#4f46e5] text-[10px] font-bold text-white">
-                      {card.count}
+        {/* ── Quick Actions ── */}
+        <div className="overflow-hidden rounded-2xl border border-[#dde0f7] bg-[#eef0fe]">
+          <div className="grid grid-cols-4 divide-x divide-[#dde0f7]">
+            {quickActions.map(action => (
+              <div key={action.id} className="flex flex-col px-6 py-6">
+
+                {/* Icon + badge */}
+                <div className="relative mb-4 self-start">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#dde0f7]">
+                    <action.Icon className="h-5 w-5 text-[#4f46e5]" />
+                  </div>
+                  {action.badge && (
+                    <span className="absolute -right-3 -top-1 rounded-full bg-[#4f46e5] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
+                      {action.badge}
                     </span>
                   )}
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm`}>
-                    <Icon className={`h-6 w-6 ${card.iconColor}`} />
-                  </div>
                 </div>
-                {/* Content */}
-                <div className="flex flex-1 flex-col gap-2 p-4">
-                  <p className="text-sm font-semibold text-[#1e1b4b]">{card.title}</p>
-                  <p className="text-xs text-gray-400 leading-relaxed">{card.description}</p>
-                  <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
-                    {card.badge && (
-                      <span className="rounded-full bg-[#eef0fe] px-2.5 py-0.5 text-[11px] font-medium text-[#4f46e5]">
-                        {card.badge}
-                      </span>
-                    )}
-                    {card.tags?.map(tag => (
-                      <span key={tag} className="rounded-full bg-gray-100 px-2.5 py-0.5 text-[11px] font-medium text-gray-500">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+
+                {/* Text */}
+                <p className="text-sm font-bold text-[#1a1a2e]">{action.title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-gray-500">{action.description}</p>
+
+                {/* CTA */}
+                <a href="#" className="mt-3 text-xs font-semibold text-[#4f46e5] underline underline-offset-2 hover:text-[#3730a3] transition-colors">
+                  {action.cta}
+                </a>
+
+                {/* Tags */}
+                <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-[#dde0f7] pt-4">
+                  {action.tags.map(tag => (
+                    <span key={tag.label} className="flex items-center gap-1 text-[11px] text-gray-500">
+                      <tag.Icon className="h-3 w-3 text-[#4f46e5]" />
+                      {tag.label}
+                    </span>
+                  ))}
                 </div>
-              </a>
-            )
-          })}
+
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* ── Two columns ── */}
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* ── Three columns ── */}
+        <div className="mt-10 grid grid-cols-3 gap-10">
 
           {/* Mis bots */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-[#1e1b4b]">Mis bots, agentes y orquestadores</h2>
-              <a href="#" className="flex items-center gap-1 text-xs text-[#4f46e5] hover:underline">
-                Ver más <ArrowRight className="h-3 w-3" />
-              </a>
-            </div>
-
-            <div className="mt-3 divide-y divide-gray-50">
-              {bots.map(bot => (
-                <div key={bot.id} className="flex items-center gap-3 py-3">
-                  <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${bot.dot}`} />
-                  <p className="flex-1 truncate text-sm font-medium text-[#1e1b4b]">{bot.name}</p>
-                  <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-500">
-                    {bot.type}
-                  </span>
-                  <span className="shrink-0 text-xs text-gray-400">{bot.date}</span>
+          <div>
+            <h2 className="mb-4 text-base font-bold text-[#1a1a2e]">Mis bots</h2>
+            <div className="space-y-4">
+              {visibleBots.map(bot => (
+                <div key={bot.id} className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#eef0fe]">
+                    {bot.type === "mail"
+                      ? <Mail className="h-3.5 w-3.5 text-[#4f46e5]" />
+                      : <Zap  className="h-3.5 w-3.5 text-[#4f46e5]" fill="currentColor" />
+                    }
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-sm font-semibold text-[#1a1a2e]">{bot.name}</span>
+                    <span className="ml-2 text-xs text-gray-400">Modificado {bot.date}</span>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <a href="#" className="mt-2 flex items-center gap-1 text-xs text-[#4f46e5] hover:underline">
-              Ver más <ArrowRight className="h-3 w-3" />
-            </a>
-          </div>
+            <button
+              onClick={() => setShowAll(v => !v)}
+              className="mt-4 flex items-center gap-1 text-sm font-medium text-[#4f46e5] hover:underline"
+            >
+              Ver más
+              <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showAll ? "rotate-180" : ""}`} />
+            </button>
 
-          {/* Agenda de próximos eventos */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-[#1e1b4b]">Agenda de próximos eventos</h2>
-              <Link href="/academy?tab=sessions" className="flex items-center gap-1 text-xs text-[#4f46e5] hover:underline">
-                Ver más <ArrowRight className="h-3 w-3" />
-              </Link>
-            </div>
-
-            <div className="mt-3 divide-y divide-gray-50">
-              {agendaEvents.map(event => (
-                <div key={event.id} className="flex items-center gap-3 py-3">
-                  {/* Fecha */}
-                  <div className="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl bg-[#eef0fe]">
-                    <span className="text-sm font-bold leading-none text-[#1e1b4b]">{event.day}</span>
-                    <span className="mt-0.5 text-[9px] font-semibold tracking-wide text-[#4f46e5]">{event.month}</span>
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex flex-1 flex-col gap-0.5 min-w-0">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <p className="truncate text-xs font-semibold text-[#1e1b4b]">{event.title}</p>
-                      <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
-                        event.type === "Workshop" ? "bg-violet-50 text-violet-600" : "bg-sky-50 text-sky-600"
-                      }`}>
-                        {event.type}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[11px] text-gray-400">
-                      <span className="flex items-center gap-0.5">
-                        <Clock className="h-3 w-3" />{event.time}
-                      </span>
-                      <span className="flex items-center gap-0.5">
-                        {event.modality === "Virtual" ? <Video className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
-                        {event.modality}
-                      </span>
-                      {event.city && <span>{event.city}</span>}
-                    </div>
-                    {event.spots !== undefined && event.spots <= 2 && (
-                      <p className="text-[10px] font-semibold text-[#e11d48]">¡Solo {event.spots} cupos disponibles!</p>
-                    )}
-                  </div>
-
-                  {/* CTA */}
-                  {confirmedIds.has(event.id) ? (
-                    <div className="shrink-0 flex flex-col items-end gap-1.5">
-                      <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700">
-                        Inscripto ✓
-                      </span>
-                      <button
-                        onClick={() => setSelectedEvent(event)}
-                        className="rounded-full border border-[#4f46e5] px-3 py-1.5 text-[11px] font-semibold text-[#4f46e5] hover:bg-[#eef0fe] transition-colors whitespace-nowrap">
-                        Reenviar invitación
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      disabled={event.btnState === "disabled"}
-                      onClick={() => event.btnState !== "disabled" && setSelectedEvent(event)}
-                      className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold whitespace-nowrap ${
-                        event.btnState === "primary"
-                          ? "bg-[#1d4ed8] text-white hover:bg-[#1e40af] transition-colors"
-                          : event.btnState === "disabled"
-                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors"
-                      }`}>
-                      {event.btnLabel}
-                    </button>
-                  )}
-                </div>
-              ))}
+            {/* Canales */}
+            <div className="mt-8">
+              <h2 className="mb-3 text-base font-bold text-[#1a1a2e]">Canales</h2>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c7d2fe] bg-[#eef0fe] px-3 py-1 text-xs font-semibold text-[#4f46e5]">
+                Conectados
+              </span>
             </div>
           </div>
-        </div>
-
-        {/* ── Bottom ── */}
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
 
           {/* Ayuda */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-sm font-bold text-[#1e1b4b]">Ayuda</h2>
-            <ul className="mt-3 flex flex-col gap-2">
-              {helpLinks.map(link => (
-                <li key={link}>
-                  <a href="#" className="flex items-center gap-1.5 text-sm text-[#4f46e5] hover:underline">
-                    <ArrowRight className="h-3.5 w-3.5 shrink-0" />{link}
-                  </a>
-                </li>
+          <div>
+            <h2 className="mb-4 text-base font-bold text-[#1a1a2e]">Ayuda</h2>
+            <div className="space-y-3">
+              {ayudaLinks.map(link => (
+                <div key={link.label}>
+                  <Link href={link.href} className="text-sm font-medium text-[#4f46e5] hover:underline">
+                    {link.label}
+                  </Link>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
 
           {/* Botmaker App */}
-          <div className="col-span-2 flex items-center gap-6 overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#eef0fe]">
-              <Smartphone className="h-8 w-8 text-[#4f46e5]" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-[#1e1b4b]">Botmaker App</h2>
-              <p className="mt-1 max-w-md text-sm text-gray-400 leading-relaxed">
-                Accedé a Botmaker desde tu celular. Gestioná conversaciones, revisá métricas y respondé a tus usuarios desde cualquier lugar.
-              </p>
-              <div className="mt-3 flex gap-2">
-                <a href="#" className="rounded-lg border border-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
-                  App Store
-                </a>
-                <a href="#" className="rounded-lg border border-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
-                  Google Play
-                </a>
-              </div>
+          <div>
+            <h2 className="mb-4 text-base font-bold text-[#1a1a2e]">Botmaker App</h2>
+            <p className="text-sm leading-relaxed text-gray-500">
+              Accede y responde a las conversaciones con tus agentes desde tu smartphone.
+            </p>
+            <div className="mt-4 flex gap-3">
+              <a href="#"
+                className="flex items-center gap-2 rounded-lg bg-black px-3 py-2 text-xs font-medium text-white hover:bg-gray-800 transition-colors">
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3.18 23.76c.33.18.7.24 1.06.18l11.9-11.9-2.37-2.37L3.18 23.76zm15.23-12.83L15.8 9.3 3.96.48C3.56.24 3.08.18 2.64.36L14.04 11.76l4.37-.83zM21.4 10.3c-.4-.22-.85-.33-1.3-.33-.45 0-.9.11-1.3.33l-2.1 1.2 2.37 2.37 2.1-1.2c.8-.46.8-1.64.23-2.37zM4.24.06C3.88 0 3.52.06 3.18.24L14.04 11.1l2.37-2.37L4.24.06z"/>
+                </svg>
+                Google Play
+              </a>
+              <a href="#"
+                className="flex items-center gap-2 rounded-lg bg-black px-3 py-2 text-xs font-medium text-white hover:bg-gray-800 transition-colors">
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                App Store
+              </a>
             </div>
           </div>
 
         </div>
       </div>
-
-      {/* ── Modal evento ── */}
-      {selectedEvent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm" onClick={() => setSelectedEvent(null)}>
-          <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl" onClick={e => e.stopPropagation()}>
-
-            {/* Header */}
-            <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef0fe]">
-                <GraduationCap className="h-5 w-5 text-[#4f46e5]" />
-              </div>
-              <p className="flex-1 text-sm font-semibold text-[#1e1b4b]">Próximo entrenamiento</p>
-              <button onClick={() => setSelectedEvent(null)} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 transition-colors">
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            {/* Body */}
-            <div className="px-6 py-5">
-              <h3 className="text-xl font-bold text-[#1e1b4b]">{selectedEvent.title}</h3>
-              <div className="mt-3 flex flex-nowrap items-center gap-x-3 text-[11px] font-medium text-[#4f46e5] overflow-hidden">
-                {selectedEvent.type === "Workshop" ? (
-                  <>
-                    <span className="flex shrink-0 items-center gap-1"><Calendar className="h-3 w-3" />{selectedEvent.day} {selectedEvent.month}</span>
-                    <span className="flex shrink-0 items-center gap-1"><Clock className="h-3 w-3" />{selectedEvent.time}</span>
-                    <span className="flex shrink-0 items-center gap-1">
-                      {selectedEvent.modality === "Virtual" ? <Video className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
-                      {selectedEvent.modality}{selectedEvent.city && ` · ${selectedEvent.city}, ${selectedEvent.country}`}
-                    </span>
-                    <span className="flex shrink-0 items-center gap-1"><Clock className="h-3 w-3" />Duración {selectedEvent.duration}</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="flex shrink-0 items-center gap-1"><Clock className="h-3 w-3" />{selectedEvent.time}</span>
-                    <span className="flex shrink-0 items-center gap-1"><Globe className="h-3 w-3" />Español</span>
-                    <span className="flex shrink-0 items-center gap-1"><DollarSign className="h-3 w-3" />Sin costo</span>
-                    <span className="flex shrink-0 items-center gap-1"><Clock className="h-3 w-3" />Duración {selectedEvent.duration}</span>
-                    <span className="flex shrink-0 items-center gap-1"><GraduationCap className="h-3 w-3" />{selectedEvent.level}</span>
-                  </>
-                )}
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-gray-500">{selectedEvent.description}</p>
-              <button className="mt-3 text-sm text-gray-400 hover:text-[#4f46e5] transition-colors">
-                ¿Tenés dudas? Ver preguntas frecuentes →
-              </button>
-            </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-end gap-4 border-t border-gray-100 px-6 py-4">
-              <button onClick={() => setSelectedEvent(null)} className="text-sm font-medium text-gray-500 hover:text-[#1e1b4b] transition-colors">
-                Cancelar
-              </button>
-              <button
-                onClick={() => {
-                  setConfirmedIds(prev => new Set([...prev, selectedEvent.id]))
-                  setSelectedEvent(null)
-                }}
-                className="rounded-full bg-[#1d4ed8] px-5 py-2 text-sm font-semibold text-white hover:bg-[#1e40af] transition-colors">
-                Confirmar
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
     </main>
   )
 }
